@@ -1,0 +1,44 @@
+name: CI Reutilizável PHP Login
+
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        required: false
+        type: string
+        default: '8.2'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get install -y php-cli php-mbstring
+          echo "Dependências instaladas."
+
+      - name: Rodar testes
+        run: |
+          echo "Simulando testes..."
+          php -l index.php
+
+      - name: Build do projeto
+        run: echo "Build realizado com sucesso!"
+
+      - name: Deploy (simulado)
+        run: echo "Realizando deploy..."
+
+      - name: Simular envio de webhook
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"status":"success","message":"Job finalizado"}' \
+          https://webhook.site/7976e3b8-2e08-4e0f-8f52-2836c82f69c2
